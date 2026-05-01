@@ -53,4 +53,22 @@ final class License {
         this.isOsiApproved = isOsiApproved;
         this.isFsfLibre = isFsfLibre;
     }
+
+    /**
+        Tries to return the license with the given name.
+        @param name The name of the license.
+        @return The license with the given name, or `null` if no such license exists.
+    **/
+    public static function tryFromName(name: String): Null<License> {
+        return spdx.Licenses.ALL_BY_NAME.get(name);
+    }
+
+    /**
+        Tries to return the license with the given ID.
+        @param id The ID of the license.
+        @return The license with the given ID, or `null` if no such license exists.
+    **/
+    public static function tryFromId(id: String): Null<License> {
+        return spdx.Licenses.ALL_BY_ID.get(id);
+    }
 }
