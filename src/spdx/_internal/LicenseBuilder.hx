@@ -85,6 +85,7 @@ final class LicenseBuilder {
                 } else {
                     [];
                 },
+                doc: '${info.license.name}.',
                 kind: FVar(
                     macro : spdx.License,
                     macro new spdx.License(
@@ -117,7 +118,11 @@ final class LicenseBuilder {
         fields.push({
             pos: position,
             name: "getById",
-            access: [Access.APublic, Access.AStatic],
+            access: [
+                Access.APublic,
+                Access.AStatic,
+            ],
+            doc: "Returns the license with the given ID, if one exists.",
             kind: FFun({
                 params: [],
                 args: [{
@@ -148,7 +153,11 @@ final class LicenseBuilder {
         fields.push({
             pos: position,
             name: "getByName",
-            access: [Access.APublic, Access.AStatic],
+            access: [
+                Access.APublic,
+                Access.AStatic,
+            ],
+            doc: "Returns the license with the given name, if one exists.",
             kind: FFun({
                 params: [],
                 args: [{
@@ -173,6 +182,7 @@ final class LicenseBuilder {
                 Access.AStatic,
                 Access.AFinal,
             ],
+            doc: "Contains all known licenses.",
             kind: FVar(macro : haxe.ds.ReadOnlyArray<spdx.License>, macro $a{allExprs}),
         });
         
