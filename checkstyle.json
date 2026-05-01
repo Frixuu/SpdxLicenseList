@@ -267,8 +267,7 @@
     {
       "type": "ReturnCount",
       "props": {
-        "severity": "INFO",
-        "max": 2
+        "severity": "IGNORE"
       }
     },
     {
