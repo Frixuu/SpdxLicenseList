@@ -246,7 +246,7 @@
     {
       "type": "UnnecessaryConstructor",
       "props": {
-        "severity": "INFO"
+        "severity": "IGNORE"
       }
     },
     {
