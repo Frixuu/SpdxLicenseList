@@ -11,6 +11,7 @@ final class TestSuiteMain {
         final runner = new Runner();
 
         runner.addCase(new MitTest());
+        runner.addCase(new FakeLicenseTest());
 
         Report.create(runner);
         runner.run();

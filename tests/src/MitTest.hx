@@ -9,7 +9,7 @@ class MitTest extends Test {
 
     public function test__Object_exists() {
         Assert.notNull(License.MIT);
-        Assert.isTrue(Std.is(License.MIT, License));
+        Assert.isTrue(Std.isOfType(License.MIT, License));
     }
     
     public function test__License_has_correct_fields() {
