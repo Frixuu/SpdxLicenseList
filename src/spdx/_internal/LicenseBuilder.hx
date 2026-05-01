@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: Zlib
 package spdx._internal;
 
 #if macro
@@ -5,8 +6,6 @@ import haxe.Json;
 import haxe.ds.StringMap;
 import haxe.io.Path;
 import haxe.macro.Context;
-import haxe.macro.Expr.Access;
-import haxe.macro.Expr.Field;
 import haxe.macro.Expr;
 import spdx.License;
 import sys.FileSystem;

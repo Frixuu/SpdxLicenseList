@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: Zlib
 package spdx._internal;
 
 using StringTools;
