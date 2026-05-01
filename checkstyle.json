@@ -228,7 +228,7 @@
     {
       "type": "Trace",
       "props": {
-        "severity": "ERROR"
+        "severity": "IGNORE"
       }
     },
     {

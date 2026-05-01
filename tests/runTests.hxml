@@ -1,0 +1,14 @@
+--class-path ../src
+--class-path src
+--library utest:git:https://github.com/haxe-utest/utest#a055e05e2e872ae12a32b53d0200612345059c38
+
+--define no-deprecation-warnings
+
+--main TestSuiteMain
+
+--each
+
+--library hashlink
+--define hl-ver=1.14.0
+--hl out/hashlink/suite.hl
+--cmd hl out/hashlink/suite.hl
