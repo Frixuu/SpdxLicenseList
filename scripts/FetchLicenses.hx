@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: Zlib
 package scripts;
 
+import haxe.Json;
 import haxe.io.Path;
 import sys.FileSystem;
 import sys.Http;
@@ -13,8 +14,20 @@ final class FetchLicenses {
     private static function main(): Void {
 
         trace("Fetching data from " + URL + "...");
-        final json = Http.requestUrl(URL);
-        trace("Downloaded data. Length: " + json.length);
+
+        var ok = false;
+        var json = "";
+        while (!ok) {
+            json = Http.requestUrl(URL);
+            trace("Downloaded data. Length: " + json.length);
+            try {
+                Json.parse(json);
+                ok = true;
+            } catch (e: Any) {
+                trace("Failed to parse JSON. Retrying...");
+                Sys.sleep(0.5);
+            }
+        }
 
         trace("Saving data...");
         final dir = Path.join([Sys.getCwd(), "data"]);
