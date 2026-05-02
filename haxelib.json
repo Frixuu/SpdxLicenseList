@@ -1,11 +1,11 @@
 {
   "name": "spdx-license-list",
-  "description": "TODO",
+  "description": "List of SPDX license identifiers.",
   "license": "Public",
   "version": "0.0.1",
   "classPath": "src/",
-  "releasenote": "N/A",
+  "releasenote": "Initial release.",
   "contributors": ["frixuu"],
   "dependencies": {},
-  "tags": []
+  "tags": ["spdx", "license", "macro"]
 }

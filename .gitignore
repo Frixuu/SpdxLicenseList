@@ -3,3 +3,4 @@ dump/
 .vscode/
 .zed/
 /tests/out/
+*.zip
