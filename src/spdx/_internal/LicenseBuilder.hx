@@ -99,6 +99,14 @@ final class LicenseBuilder {
             });
         }
         
+        final metaSilenceDeprecated = {
+            pos: position,
+            name: ":haxe.warning",
+            params: [
+                {expr: EConst(CString("-WDeprecated")), pos: position}
+            ],
+        };
+        
         final allByIdExprs: Array<Expr> = [];
         for (info in licenseInfos) {
             allByIdExprs.push(macro $v{info.license.id} => $i{info.identifier});
@@ -111,6 +119,9 @@ final class LicenseBuilder {
                 Access.APrivate,
                 Access.AStatic,
                 Access.AFinal,
+            ],
+            meta: [
+                metaSilenceDeprecated
             ],
             kind: FVar(macro : haxe.ds.StringMap<spdx.License>, macro $a{allByIdExprs}),
         });
@@ -147,6 +158,9 @@ final class LicenseBuilder {
                 Access.AStatic,
                 Access.AFinal,
             ],
+            meta: [
+                metaSilenceDeprecated
+            ],
             kind: FVar(macro : haxe.ds.StringMap<spdx.License>, macro $a{allByNameExprs}),
         });
         
@@ -181,6 +195,9 @@ final class LicenseBuilder {
                 Access.APublic,
                 Access.AStatic,
                 Access.AFinal,
+            ],
+            meta: [
+                metaSilenceDeprecated
             ],
             doc: "Contains all known licenses.",
             kind: FVar(macro : haxe.ds.ReadOnlyArray<spdx.License>, macro $a{allExprs}),

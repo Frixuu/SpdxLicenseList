@@ -1,8 +1,7 @@
---class-path ../src
 --class-path src
---library utest:git:https://github.com/haxe-utest/utest#a055e05e2e872ae12a32b53d0200612345059c38
 
---define no-deprecation-warnings
+--library utest:git:https://github.com/haxe-utest/utest#a055e05e2e872ae12a32b53d0200612345059c38
+--library spdx-license-list
 
 --main TestSuiteMain
 
