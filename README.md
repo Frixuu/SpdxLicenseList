@@ -1,6 +1,8 @@
 # SPDX License List for Haxe
 
-This library provides a **partial** view of the [SPDX License List](https://spdx.org/licenses/). Notably, it aims to include canonical names and short identifiers of all of the licenses on the list, but not their full text.
+This library provides a **partial** view of the [SPDX License List](https://spdx.org/licenses/).
+Notably, it aims to include canonical names and short identifiers
+of all of the licenses on the list, but not their full text.
 
 Current list version: 3.28.0 (2026-02-20).
 
@@ -18,6 +20,14 @@ trace(license1.id);            // "MIT"
 trace(license1.isDeprecated);  // false
 trace(license1.isOsiApproved); // true
 trace(license1.isFsfLibre);    // true
+```
+
+```haxe
+import spdx.Expression;
+import spdx.ExpressionTools;
+
+var expr1: Null<Expression> = ExpressionTools.parse("MIT OR Apache-2.0");
+var expr2: Null<Expression> = ExpressionTools.parse("GPL-2.0+ WITH Bootloader-exception")
 ```
 
 ## Notices
