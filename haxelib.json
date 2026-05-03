@@ -2,9 +2,9 @@
   "name": "spdx-license-list",
   "description": "List of SPDX license identifiers.",
   "license": "Public",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "classPath": "src/",
-  "releasenote": "Initial release.",
+  "releasenote": "Add Exceptions and Expressions.",
   "contributors": ["frixuu"],
   "dependencies": {},
   "tags": ["spdx", "license", "macro"]
