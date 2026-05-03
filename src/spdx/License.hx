@@ -5,7 +5,7 @@ package spdx;
     Information about a license.
 **/
 #if !macro
-@:build(spdx._internal.LicenseBuilder.generateFromDataFile())
+@:build(spdx._internal.DataBuilder.generateLicenses())
 #end
 final class License {
 
@@ -42,8 +42,7 @@ final class License {
     /**
         Creates a new license object.
     **/
-    @:allow(spdx.Licenses)
-    @:allow(spdx._internal.LicenseBuilder)
+    @:allow(spdx._internal.DataBuilder)
     private function new(
         name: String,
         id: String,

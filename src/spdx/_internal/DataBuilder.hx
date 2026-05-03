@@ -19,13 +19,13 @@ typedef LicenseInfo = {
 };
 
 #end
-final class LicenseBuilder {
+final class DataBuilder {
 
     /**
         Generates license objects from `@/data/licenses.json`.
         @return Fields of the built class.
     **/
-    public static macro function generateFromDataFile(): Array<Field> {
+    public static macro function generateLicenses(): Array<Field> {
     
         final position = Context.currentPos();
         final posInfos = Context.getPosInfos(position);
