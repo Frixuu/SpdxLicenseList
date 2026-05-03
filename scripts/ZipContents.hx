@@ -10,5 +10,6 @@ function main(): Void {
         "extraParams.hxml",
         "haxelib.json",
         "README.md",
+        "LICENSE.txt",
     ]);
 }
