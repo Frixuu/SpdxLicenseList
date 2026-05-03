@@ -44,9 +44,9 @@ final class DataBuilder {
         final json = File.getContent(Path.join([dir, "licenses.json"]));
         final data: Schema.LicenseData = Json.parse(json);
         final licensesByName: StringMap<LicenseInfo> = new StringMap();
+        final licensesByIdentifier: StringMap<LicenseInfo> = new StringMap();
         final licenseInfos: Array<LicenseInfo> = data.licenses.map((def) -> {
         
-            final identifier = Identifiers.mangleName(def.name, def.isDeprecatedLicenseId);
             final license = new License(
                 def.name,
                 def.licenseId,
@@ -56,13 +56,25 @@ final class DataBuilder {
             );
             
             final licenseInfo: LicenseInfo = {
-                identifier: identifier,
+                identifier: Identifiers.makeLicenseIdentifier(license),
                 license: license,
             };
             
-            final existing = licensesByName.get(license.name);
-            if (existing == null || existing.license.isDeprecated) {
-                licensesByName.set(license.name, licenseInfo);
+            {
+                final existing = licensesByName.get(license.name);
+                if (existing == null || existing.license.isDeprecated) {
+                    licensesByName.set(license.name, licenseInfo);
+                }
+            }
+            {
+                final existing = licensesByIdentifier.get(licenseInfo.identifier);
+                if (existing == null) {
+                    licensesByIdentifier.set(licenseInfo.identifier, licenseInfo);
+                } else if (existing.license.isDeprecated) {
+                    existing.identifier = existing.identifier + "_";
+                    licensesByIdentifier.set(existing.identifier, existing);
+                    licensesByIdentifier.set(licenseInfo.identifier, licenseInfo);
+                }
             }
             
             return licenseInfo;
@@ -217,8 +229,6 @@ final class DataBuilder {
         final exceptionsByName: StringMap<ExceptionInfo> = new StringMap();
         final exceptionInfos: Array<ExceptionInfo> = data.exceptions.map((def) -> {
         
-            // Exception names shouldn't collide
-            final identifier = Identifiers.mangleName(def.name, false);
             final exception = new Exception(
                 def.name,
                 def.licenseExceptionId,
@@ -226,7 +236,7 @@ final class DataBuilder {
             );
             
             final exceptionInfo: ExceptionInfo = {
-                identifier: identifier,
+                identifier: Identifiers.makeExceptionIdentifier(exception),
                 exception: exception,
             };
             
