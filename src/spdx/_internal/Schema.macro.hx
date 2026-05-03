@@ -1,20 +1,38 @@
 // SPDX-License-Identifier: Zlib
 package spdx._internal;
 
-typedef License = {
+typedef Item = {
     reference: String,
-    isDeprecatedLicenseId: Bool,
+    name: String,
     detailsUrl: String,
     referenceNumber: Int,
-    name: String,
-    licenseId: String,
+    isDeprecatedLicenseId: Bool,
     seeAlso: Array<String>,
-    isOsiApproved: Bool,
-    isFsfLibre: Null<Bool>,
-};
+}
 
-typedef LicenseData = {
-    licenses: Array<License>,
+typedef Collection = {
     licenseListVersion: String,
     releaseDate: String,
+}
+
+typedef License = {
+    > Item,
+    licenseId: String,
+    isOsiApproved: Bool,
+    isFsfLibre: Null<Bool>,
+}
+
+typedef LicenseData = {
+    > Collection,
+    licenses: Array<License>,
+}
+
+typedef Exception = {
+    > Item,
+    licenseExceptionId: String,
+}
+
+typedef ExceptionData = {
+    > Collection,
+    exceptions: Array<Exception>,
 }
