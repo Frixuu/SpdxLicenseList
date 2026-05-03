@@ -41,11 +41,12 @@
     "typeParamOpenPolicy": "none",
     "typeParamClosePolicy": "none",
     "objectFieldColonPolicy": "after",
+    "ifPolicy": "after",
     "ternaryPolicy": "around",
     "parenConfig": {
       "conditionParens": {
         "openingPolicy": "before",
-        "closingPolicy": "none"
+        "closingPolicy": "after"
       },
       "anonFuncParamParens": {
         "openingPolicy": "none",

@@ -14,6 +14,8 @@ final class TestSuiteMain {
         runner.addCase(new FakeLicenseTest());
         runner.addCase(new NokiaQtExceptionTest());
         
+        runner.addCase(new expressions.ExpressionStringifyTest());
+        
         Report.create(runner);
         runner.run();
     }
