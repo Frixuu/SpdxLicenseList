@@ -27,6 +27,8 @@ class MitTest extends Test {
     
     public function test__License_can_be_retrieved_by_ID() {
         Assert.equals(License.MIT, License.getById("MIT"));
+        Assert.equals(License.MIT, License.getById("mit"));
+        Assert.equals(License.MIT, License.getById("mIt"));
     }
     
     public function test__License_is_in_all_array() {

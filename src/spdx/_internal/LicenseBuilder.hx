@@ -109,7 +109,7 @@ final class LicenseBuilder {
         
         final allByIdExprs: Array<Expr> = [];
         for (info in licenseInfos) {
-            allByIdExprs.push(macro $v{info.license.id} => $i{info.identifier});
+            allByIdExprs.push(macro $v{info.license.id.toLowerCase()} => $i{info.identifier});
         }
         
         fields.push({
@@ -141,7 +141,7 @@ final class LicenseBuilder {
                     type: macro : String,
                 }],
                 ret: macro : Null<spdx.License>,
-                expr: macro return spdx.License.__ALL_BY_ID.get(id),
+                expr: macro return spdx.License.__ALL_BY_ID.get(id.toLowerCase()),
             })
         });
         
