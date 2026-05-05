@@ -18,7 +18,7 @@ final class ExpressionTools {
                 '${document != null ? 'DocumentRef-$document:' : ""}LicenseRef-$license';
         };
     }
-
+    
     private static function stringifyExceptionExpr(expr: ExceptionExpr): String {
         return switch expr {
             case Defined(exception):
@@ -27,7 +27,7 @@ final class ExpressionTools {
                 '${document != null ? 'DocumentRef-$document:' : ""}AdditionRef-$addition';
         };
     }
-
+    
     /**
         Converts an expression to a string.
         @param expr The expression to convert.
@@ -47,7 +47,7 @@ final class ExpressionTools {
                 '$a AND $b';
         }
     }
-
+    
     private static function toToken(name: String): Token {
         return switch name.toLowerCase() {
             case "and":
@@ -60,22 +60,22 @@ final class ExpressionTools {
                 Token.Identifier(name);
         }
     }
-
+    
     private static function tokenize(source: String): Array<Token> {
-
+    
         final tokens: Array<Token> = [];
         var identStart: Null<Int> = null;
         var index = 0;
-
+        
         while (true) {
-
+        
             if (index >= source.length) {
                 if (identStart != null) {
                     tokens.push(Token.Identifier(source.substring(identStart)));
                 }
                 break;
             }
-
+            
             final char = source.charCodeAt(index);
             if (identStart == null) {
                 if (char == " ".code) {
@@ -102,13 +102,13 @@ final class ExpressionTools {
                     identStart = null;
                 }
             }
-
+            
             index += 1;
         }
-
+        
         return tokens;
     }
-
+    
     /**
         Parses an expression from a string.
         @param source The source string.
@@ -122,7 +122,7 @@ final class ExpressionTools {
             return null;
         }
     }
-
+    
     /**
         Parses an expression from a string.
         @param source The source string.
@@ -132,24 +132,24 @@ final class ExpressionTools {
         final tokens = tokenize(source);
         return parseImpl(tokens);
     }
-
+    
     private static function isValidIdentifier(name: String): Bool {
         static final pattern = ~/^[a-zA-Z0-9\-\.]{1,}$/;
         return pattern.match(name);
     }
-
+    
     private static function parseLicenseExpr(name: String, plus: Bool): Null<LicenseExpr> {
         if (name.contains("LicenseRef-")) {
-
+        
             if (plus) {
                 return null;
             }
-
+            
             final parts = name.split(":");
             if (parts.length > 2) {
                 return null;
             }
-
+            
             var document: Null<String> = null;
             if (parts.length == 2) {
                 document = parts[0];
@@ -161,7 +161,7 @@ final class ExpressionTools {
                     return null;
                 }
             }
-
+            
             var license = if (parts.length == 2) {
                 parts[1];
             } else {
@@ -174,7 +174,7 @@ final class ExpressionTools {
             if (license.length == 0) {
                 return null;
             }
-
+            
             return Ref(document, license);
         } else {
             final license = License.getById(name);
@@ -185,15 +185,15 @@ final class ExpressionTools {
             }
         }
     }
-
+    
     private static function parseExceptionExpr(name: String): Null<ExceptionExpr> {
         if (name.contains("AdditionRef-")) {
-
+        
             final parts = name.split(":");
             if (parts.length > 2) {
                 return null;
             }
-
+            
             var document: Null<String> = null;
             if (parts.length == 2) {
                 document = parts[0];
@@ -205,7 +205,7 @@ final class ExpressionTools {
                     return null;
                 }
             }
-
+            
             var exception = if (parts.length == 2) {
                 parts[1];
             } else {
@@ -218,7 +218,7 @@ final class ExpressionTools {
             if (exception.length == 0) {
                 return null;
             }
-
+            
             return Ref(document, exception);
         } else {
             final exception = Exception.getById(name);
@@ -229,18 +229,18 @@ final class ExpressionTools {
             }
         }
     }
-
+    
     @SuppressWarnings("checkstyle:CyclomaticComplexity", "checkstyle:NestedControlFlow")
     private static function parseImpl(tokens: ReadOnlyArray<Token>): Expression {
-
+    
         var index = 0;
         final stack: Array<Expression> = [];
-
+        
         while (index < tokens.length) {
-
+        
             final token = tokens[index];
             index += 1;
-
+            
             switch token {
                 case Token.OpenParen:
                     var depth = 1;
@@ -280,7 +280,7 @@ final class ExpressionTools {
                             }
                         }
                     }
-
+                    
                 case Token.CloseParen:
                     throw "unexpected closing parenthesis";
                 case Token.OpPlus:
@@ -316,7 +316,7 @@ final class ExpressionTools {
                     } else {
                         false;
                     };
-
+                    
                     if (stack.length >= 1) {
                         final last = stack.pop();
                         switch last {
@@ -354,7 +354,7 @@ final class ExpressionTools {
                     }
             }
         }
-
+        
         return if (stack.length == 1) {
             stack[0];
         } else {

@@ -1,0 +1,36 @@
+name: Lint
+permissions: read-all
+on:
+  - push
+  - pull_request
+
+jobs:
+  formatting:
+    name: Formatting
+    runs-on: ubuntu-slim
+    steps:
+      - name: Install Haxe
+        uses: krdlab/setup-haxe@v2
+        with:
+          haxe-version: "4.3.7"
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Install Haxe tools
+        run: haxelib install formatter 1.18.0 --quiet
+      - name: Run formatter
+        run: haxelib run formatter --check --source src
+
+  checkstyle:
+    name: Static analysis
+    runs-on: ubuntu-slim
+    steps:
+      - name: Install Haxe
+        uses: krdlab/setup-haxe@v2
+        with:
+          haxe-version: "4.3.7"
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Install tools
+        run: haxelib install checkstyle 2.9.0 --quiet
+      - name: Run Checkstyle
+        run: haxelib run checkstyle --exitcode --source src

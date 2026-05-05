@@ -1,0 +1,38 @@
+name: Test
+permissions: read-all
+on:
+  - push
+  - pull_request
+
+jobs:
+  build:
+    name: "Run tests (Haxe ${{ matrix.haxe-version }})"
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        haxe-version:
+          - "4.3.7"
+          - "latest"
+    steps:
+      - name: Install Haxe
+        uses: krdlab/setup-haxe@v2
+        with:
+          haxe-version: "${{ matrix.haxe-version }}"
+      - name: Install Hashlink
+        uses: cedx/setup-hashlink@v8
+        with:
+          version: "1.15.0"
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Install Haxe dependencies
+        run: haxelib install tests/runTests.hxml --always --quiet
+      - name: Set library dev directory
+        run: haxelib dev spdx-license-list .
+      - name: Apply additional config (Haxe 5 only)
+        if: "${{ matrix.haxe-version == 'latest' }}"
+        run: sed --in-place '1i--define haxe5' runTests.hxml
+        shell: bash
+        working-directory: tests
+      - name: Run test suite
+        run: haxe --cwd tests runTests.hxml
