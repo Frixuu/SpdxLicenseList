@@ -23,7 +23,7 @@ class ExpressionStringifyTest extends Test {
             Simple(Ref("spdx-tool-1.2", "MIT-Style-2")).stringify()
         );
     }
-
+    
     public function test__Or_expressions_are_correctly_stringified() {
         Assert.same(
             "MIT OR LGPL-2.1-only",
@@ -49,11 +49,11 @@ class ExpressionStringifyTest extends Test {
                     Simple(Defined(License.MIT, false)),
                     Simple(Defined(License.LGPL_2_1_ONLY, false))
                 ),
-                Simple(Defined(License.BSD_3_CLAUSE, false)),
+                Simple(Defined(License.BSD_3_CLAUSE, false))
             ).stringify()
         );
     }
-
+    
     public function test__And_expressions_are_correctly_stringified() {
         Assert.same(
             "MIT AND LGPL-2.1-only",
@@ -79,18 +79,18 @@ class ExpressionStringifyTest extends Test {
                     Simple(Defined(License.MIT, false)),
                     Simple(Defined(License.LGPL_2_1_ONLY, false))
                 ),
-                Simple(Defined(License.BSD_3_CLAUSE, false)),
+                Simple(Defined(License.BSD_3_CLAUSE, false))
             ).stringify()
         );
     }
-
+    
     public function test__With_expressions_are_correctly_stringified() {
         Assert.same(
             "GPL-2.0-or-later WITH Bison-exception-2.2",
             With(Defined(License.GPL_2_0_OR_LATER, false), Defined(Exception.BISON_2_2)).stringify()
         );
     }
-
+    
     public function test__Mixed_operators_are_correctly_stringified() {
         Assert.same(
             "LGPL-2.1-only OR BSD-3-Clause AND MIT",
