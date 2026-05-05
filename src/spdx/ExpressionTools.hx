@@ -133,9 +133,10 @@ final class ExpressionTools {
         return parseImpl(tokens);
     }
     
+    private static final PATTERN_IDENTIFIER: EReg = ~/^[a-zA-Z0-9\-\.]{1,}$/;
+    
     private static function isValidIdentifier(name: String): Bool {
-        static final pattern = ~/^[a-zA-Z0-9\-\.]{1,}$/;
-        return pattern.match(name);
+        return PATTERN_IDENTIFIER.match(name);
     }
     
     private static function parseLicenseExpr(name: String, plus: Bool): Null<LicenseExpr> {
@@ -323,33 +324,26 @@ final class ExpressionTools {
                             case Simple(license):
                                 throw 'two identifiers in a row: first ${stringifyLicenseExpr(license)}, then "$name"';
                             case And(left, null):
-                                final expr = parseLicenseExpr(
-                                    name,
-                                    orLater
-                                ) ?? throw '"$name" is not a valid license';
+                                final expr = parseLicenseExpr(name, orLater);
+                                if (expr == null) throw '"$name" is not a valid license';
                                 stack.push(And(left, Simple(expr)));
                             case Or(left, null):
-                                final expr = parseLicenseExpr(
-                                    name,
-                                    orLater
-                                ) ?? throw '"$name" is not a valid license';
+                                final expr = parseLicenseExpr(name, orLater);
+                                if (expr == null) throw '"$name" is not a valid license';
                                 stack.push(Or(left, Simple(expr)));
                             case With(license, null):
                                 if (orLater) {
                                     throw 'unexpected binop + after exception name "$name"';
                                 }
-                                final expr = parseExceptionExpr(
-                                    name
-                                ) ?? throw '$name is not a valid exception';
+                                final expr = parseExceptionExpr(name);
+                                if (expr == null) throw '$name is not a valid exception';
                                 stack.push(With(license, expr));
                             case _:
                                 throw 'unexpected identifier "$name"';
                         }
                     } else {
-                        final expr = parseLicenseExpr(
-                            name,
-                            orLater
-                        ) ?? throw '"$name" is not a valid license';
+                        final expr = parseLicenseExpr(name, orLater);
+                        if (expr == null) throw '"$name" is not a valid license';
                         stack.push(Simple(expr));
                     }
             }

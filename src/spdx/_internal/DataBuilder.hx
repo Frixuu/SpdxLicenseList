@@ -105,7 +105,13 @@ final class DataBuilder {
                         $v{info.license.id},
                         $v{info.license.isDeprecated},
                         $v{info.license.isOsiApproved},
-                        $v{info.license.isFsfLibre ?? false}
+                        $v{
+                            if (info.license.isFsfLibre != null) {
+                                info.license.isFsfLibre;
+                            } else {
+                                false;
+                            }
+                        }
                     )
                 ),
             });
@@ -271,7 +277,7 @@ final class DataBuilder {
                     macro new spdx.Exception(
                         $v{info.exception.name},
                         $v{info.exception.id},
-                        $v{info.exception.isDeprecated},
+                        $v{info.exception.isDeprecated}
                     )
                 ),
             });
