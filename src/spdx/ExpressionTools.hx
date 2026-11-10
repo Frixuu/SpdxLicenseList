@@ -161,6 +161,9 @@ final class ExpressionTools {
                 if (document.length == 0) {
                     return null;
                 }
+                if (!isValidIdentifier(document)) {
+                    return null;
+                }
             }
             
             var license = if (parts.length == 2) {
@@ -173,6 +176,9 @@ final class ExpressionTools {
             }
             license = license.substring("LicenseRef-".length);
             if (license.length == 0) {
+                return null;
+            }
+            if (!isValidIdentifier(license)) {
                 return null;
             }
             
@@ -205,6 +211,9 @@ final class ExpressionTools {
                 if (document.length == 0) {
                     return null;
                 }
+                if (!isValidIdentifier(document)) {
+                    return null;
+                }
             }
             
             var exception = if (parts.length == 2) {
@@ -217,6 +226,9 @@ final class ExpressionTools {
             }
             exception = exception.substring("AdditionRef-".length);
             if (exception.length == 0) {
+                return null;
+            }
+            if (!isValidIdentifier(exception)) {
                 return null;
             }
             

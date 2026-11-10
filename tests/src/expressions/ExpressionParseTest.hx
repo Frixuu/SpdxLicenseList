@@ -57,12 +57,18 @@ class ExpressionParseTest extends Test {
     }
     
     public function test__Invalid_expressions_are_rejected() {
+        Assert.isNull(ExpressionTools.parse("LicenseRef-"));
         Assert.isNull(ExpressionTools.parse("LicenseRef-67+"));
+        Assert.isNull(ExpressionTools.parse("cool-LicenseRef-foo"));
         Assert.isNull(ExpressionTools.parse("67676767"));
+        Assert.isNull(ExpressionTools.parse("DocumentRef-ąęóść:LicenseRef-foo"));
+        Assert.isNull(ExpressionTools.parse("LicenseRef-😎"));
         Assert.isNull(ExpressionTools.parse("(("));
         Assert.isNull(ExpressionTools.parse(")"));
         Assert.isNull(ExpressionTools.parse("()"));
         Assert.isNull(ExpressionTools.parse("MIT AND+"));
+        Assert.isNull(ExpressionTools.parse("MIT WITH DocumentRef-👻:AdditionRef-yo"));
+        Assert.isNull(ExpressionTools.parse("MIT WITH AdditionRef-привет"));
         Assert.isNull(ExpressionTools.parse("GPL-2.0-or-later WITH DocumentRef-custom"));
     }
 }
