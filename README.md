@@ -4,7 +4,7 @@ This library provides a **partial** view of the [SPDX License List](https://spdx
 Notably, it aims to include canonical names and short identifiers
 of all of the licenses on the list, but not their full text.
 
-Current list version: 3.28.0 (2026-02-20).
+Current list version: 3.29.0 (2026-09-16).
 
 ## Usage
 
