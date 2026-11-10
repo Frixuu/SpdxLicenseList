@@ -18,7 +18,7 @@ jobs:
       - name: Install Haxe tools
         run: haxelib install formatter 1.18.0 --quiet
       - name: Run formatter
-        run: haxelib run formatter --check --source src
+        run: haxelib run formatter --check --source src --source tests
 
   checkstyle:
     name: Static analysis
