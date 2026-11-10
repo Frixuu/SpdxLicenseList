@@ -22,11 +22,11 @@ jobs:
         with:
           haxe-version: "${{ matrix.haxe-version }}"
       - name: Install Hashlink
-        uses: cedx/setup-hashlink@v8
+        uses: cedx/setuphashlink@v9
         with:
-          version: "1.15.0"
+          version: "=1.15.0"
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: Install Haxe dependencies
         run: haxelib install tests/runTests.hxml --always --quiet
       - name: Set library dev directory
