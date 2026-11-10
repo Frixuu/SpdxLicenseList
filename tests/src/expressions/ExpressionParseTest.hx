@@ -23,12 +23,7 @@ class ExpressionParseTest extends Test {
             ExpressionTools.parse("DocumentRef-spdx-tool-1.2:LicenseRef-MIT-Style-2")
         );
     }
-
-    public function test__Invalid_identifiers_are_rejected() {
-        Assert.isNull(ExpressionTools.parse("LicenseRef-67+"));
-        Assert.isNull(ExpressionTools.parse("67676767"));
-    }
-
+    
     public function test__Compound_expressions_are_correctly_parsed() {
         Assert.same(
             Or(
@@ -55,5 +50,19 @@ class ExpressionParseTest extends Test {
             With(Defined(License.GPL_2_0_OR_LATER, false), Defined(Exception.AUTOCONF_2_0)),
             ExpressionTools.parse("GPL-2.0-or-later WITH Autoconf-exception-2.0")
         );
+        Assert.same(
+            With(Defined(License.GPL_2_0_OR_LATER, false), Ref(null, "custom")),
+            ExpressionTools.parse("GPL-2.0-or-later WITH AdditionRef-custom")
+        );
+    }
+    
+    public function test__Invalid_expressions_are_rejected() {
+        Assert.isNull(ExpressionTools.parse("LicenseRef-67+"));
+        Assert.isNull(ExpressionTools.parse("67676767"));
+        Assert.isNull(ExpressionTools.parse("(("));
+        Assert.isNull(ExpressionTools.parse(")"));
+        Assert.isNull(ExpressionTools.parse("()"));
+        Assert.isNull(ExpressionTools.parse("MIT AND+"));
+        Assert.isNull(ExpressionTools.parse("GPL-2.0-or-later WITH DocumentRef-custom"));
     }
 }

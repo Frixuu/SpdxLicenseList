@@ -89,6 +89,14 @@ class ExpressionStringifyTest extends Test {
             "GPL-2.0-or-later WITH Bison-exception-2.2",
             With(Defined(License.GPL_2_0_OR_LATER, false), Defined(Exception.BISON_2_2)).stringify()
         );
+        Assert.same(
+            "GPL-2.0-or-later WITH AdditionRef-custom",
+            With(Defined(License.GPL_2_0_OR_LATER, false), Ref(null, "custom")).stringify()
+        );
+        Assert.same(
+            "GPL-2.0-or-later WITH DocumentRef-foo:AdditionRef-bar",
+            With(Defined(License.GPL_2_0_OR_LATER, false), Ref("foo", "bar")).stringify()
+        );
     }
     
     public function test__Mixed_operators_are_correctly_stringified() {
