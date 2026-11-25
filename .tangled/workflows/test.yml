@@ -1,0 +1,19 @@
+when:
+  - event: [push, pull_request, manual]
+    branch: ["*"]
+
+engine: microvm
+image: nixos
+dependencies:
+  - haxe
+  - hashlink
+
+steps:
+  - name: Set up Haxelib
+    command: haxelib newrepo
+  - name: Install Haxe dependencies
+    command: haxelib install tests/runTests.hxml --always --quiet
+  - name: Set library dev directory
+    command: haxelib dev spdx-license-list .
+  - name: Run test suite
+    command: haxe --cwd tests runTests.hxml
