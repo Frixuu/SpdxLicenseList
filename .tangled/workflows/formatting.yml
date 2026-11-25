@@ -1,0 +1,14 @@
+when:
+  - event: [push, pull_request]
+    branch: ["*"]
+
+engine: nixery
+dependencies:
+  nixpkgs:
+    - haxe
+
+steps:
+  - name: Install formatter
+    command: haxelib install formatter 1.18.0 --quiet
+  - name: Run formatter
+    command: haxelib run formatter --check --source src --source tests
