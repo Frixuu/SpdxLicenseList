@@ -1,0 +1,16 @@
+when:
+  - event: [push, pull_request]
+    branch: ["*"]
+
+engine: microvm
+image: nixos
+dependencies:
+  - haxe
+
+steps:
+  - name: Set up Haxelib
+    command: haxelib newrepo
+  - name: Install Checkstyle
+    command: haxelib install checkstyle 2.9.0 --quiet
+  - name: Run Checkstyle
+    command: haxelib run checkstyle --exitcode --source src
