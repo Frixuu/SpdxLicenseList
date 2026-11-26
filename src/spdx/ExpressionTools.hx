@@ -308,28 +308,28 @@ final class ExpressionTools {
                 case Token.OpPlus:
                     throw "unexpected binop +";
                 case Token.OpAnd:
-                    if (stack.length >= 1) {
-                        stack.push(And(stack.pop(), null));
+                    final lhs = stack.pop();
+                    if (lhs != null) {
+                        @:nullSafety(Off) stack.push(And(lhs, null));
                     } else {
                         throw "unexpected AND without left operand";
                     }
                 case Token.OpOr:
-                    if (stack.length >= 1) {
-                        stack.push(Or(stack.pop(), null));
+                    final lhs = stack.pop();
+                    if (lhs != null) {
+                        @:nullSafety(Off) stack.push(Or(lhs, null));
                     } else {
                         throw "unexpected OR without left operand";
                     }
                 case Token.OpWith:
-                    if (stack.length >= 1) {
-                        final last = stack.pop();
-                        switch last {
-                            case Simple(license):
-                                stack.push(With(license, null));
-                            case _:
-                                throw 'left operand of WITH was expected to be a license, got $last';
-                        }
-                    } else {
-                        throw "unexpected WITH without left operand";
+                    final lhs = stack.pop();
+                    switch lhs {
+                        case null:
+                            throw "unexpected WITH without left operand";
+                        case Simple(license):
+                            @:nullSafety(Off) stack.push(With(license, null));
+                        case _:
+                            throw 'left operand of WITH was expected to be a license, got $lhs';
                     }
                 case Token.Identifier(name):
                     final orLater = if (index < tokens.length && tokens[index] == Token.OpPlus) {
