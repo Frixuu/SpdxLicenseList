@@ -12,13 +12,13 @@ final class ExpressionTools {
 
     private static function stringifyLicenseExpr(expr: LicenseExpr): String {
         return switch expr {
-            case Defined(license, orAnyLater):
+            case Listed(license, orAnyLater):
                 if (orAnyLater) {
                     '${license.id}+';
                 } else {
                     license.id;
                 };
-            case Ref(document, license):
+            case Custom(document, license):
                 if (document != null) {
                     'DocumentRef-$document:LicenseRef-$license';
                 } else {
@@ -29,9 +29,9 @@ final class ExpressionTools {
     
     private static function stringifyExceptionExpr(expr: ExceptionExpr): String {
         return switch expr {
-            case Defined(exception):
+            case Listed(exception):
                 exception.id;
-            case Ref(document, addition):
+            case Custom(document, addition):
                 if (document != null) {
                     'DocumentRef-$document:AdditionRef-$addition';
                 } else {
@@ -192,13 +192,13 @@ final class ExpressionTools {
                 return null;
             }
             
-            return Ref(document, license);
+            return Custom(document, license);
         } else {
             final license = License.getById(name);
             if (license == null) {
                 return null;
             }
-            return Defined(license, plus);
+            return Listed(license, plus);
         }
     }
     
@@ -241,18 +241,18 @@ final class ExpressionTools {
                 return null;
             }
             
-            return Ref(document, exception);
+            return Custom(document, exception);
         } else {
             final exception = Exception.getById(name);
             if (exception == null) {
                 return null;
             }
             
-            return Defined(exception);
+            return Listed(exception);
         }
     }
     
-    @SuppressWarnings("checkstyle:CyclomaticComplexity", "checkstyle:NestedControlFlow")
+    @SuppressWarnings("checkstyle:CyclomaticComplexity")
     private static function parseImpl(tokens: ReadOnlyArray<Token>): Expression {
     
         var index = 0;

@@ -11,14 +11,14 @@ enum LicenseExpr {
         @param license The license object.
         @param orAnyLater Use of any later version of this license is permitted (non-GNU only.)
     **/
-    Defined(license: License, orAnyLater: Bool);
+    Listed(license: License, orAnyLater: Bool);
     
     /**
         A custom, user-defined license, not present on the SPDX License list.
         @param documentRef (Optional) A reference to a document.
         @param licenseRef A reference to a license.
     **/
-    Ref(documentRef: Null<String>, licenseRef: String);
+    Custom(documentRef: Null<String>, licenseRef: String);
     // ------------------------
     // No license is present.
     // None; // part of proposed spec v3.1
@@ -38,14 +38,14 @@ enum ExceptionExpr {
         A well-known license exception listed on the SPDX Exceptions list.
         @param exception The exception object.
     **/
-    Defined(exception: Exception);
+    Listed(exception: Exception);
     
     /**
         A custom, user-defined addition, not present on the SPDX Exceptions list.
         @param documentRef (Optional) A reference to a document.
         @param additionRef A reference to an addition.
     **/
-    Ref(documentRef: Null<String>, additionRef: String);
+    Custom(documentRef: Null<String>, additionRef: String);
 }
 
 /**

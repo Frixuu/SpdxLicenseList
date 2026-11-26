@@ -15,11 +15,11 @@ using spdx.ExpressionTools;
 class ExpressionParseTest extends Test {
 
     public function test__Simple_expressions_are_correctly_parsed() {
-        Assert.same(Simple(Defined(License.MIT, false)), ExpressionTools.parse("MIT"));
-        Assert.same(Simple(Defined(License.CDDL_1_0, true)), ExpressionTools.parse("CDDL-1.0+"));
-        Assert.same(Simple(Ref(null, "23")), ExpressionTools.parse("LicenseRef-23"));
+        Assert.same(Simple(Listed(License.MIT, false)), ExpressionTools.parse("MIT"));
+        Assert.same(Simple(Listed(License.CDDL_1_0, true)), ExpressionTools.parse("CDDL-1.0+"));
+        Assert.same(Simple(Custom(null, "23")), ExpressionTools.parse("LicenseRef-23"));
         Assert.same(
-            Simple(Ref("spdx-tool-1.2", "MIT-Style-2")),
+            Simple(Custom("spdx-tool-1.2", "MIT-Style-2")),
             ExpressionTools.parse("DocumentRef-spdx-tool-1.2:LicenseRef-MIT-Style-2")
         );
     }
@@ -27,31 +27,31 @@ class ExpressionParseTest extends Test {
     public function test__Compound_expressions_are_correctly_parsed() {
         Assert.same(
             Or(
-                Or(Simple(Defined(License.MIT, false)), Simple(Defined(License.APACHE_2_0, false))),
-                Simple(Defined(License.GPL_2_0_ONLY, false))
+                Or(Simple(Listed(License.MIT, false)), Simple(Listed(License.APACHE_2_0, false))),
+                Simple(Listed(License.GPL_2_0_ONLY, false))
             ),
             ExpressionTools.parse("MIT Or apache-2.0 or GPL-2.0-only")
         );
         Assert.same(
             And(
-                Simple(Defined(License.MIT, false)),
+                Simple(Listed(License.MIT, false)),
                 Or(
-                    Simple(Defined(License.LGPL_2_1_OR_LATER, false)),
-                    Simple(Defined(License.BSD_3_CLAUSE, false))
+                    Simple(Listed(License.LGPL_2_1_OR_LATER, false)),
+                    Simple(Listed(License.BSD_3_CLAUSE, false))
                 )
             ),
             ExpressionTools.parse("MIT AND (LGPL-2.1-or-later OR BSD-3-Clause)")
         );
         Assert.same(
-            Or(Simple(Defined(License.MIT, false)), Simple(Defined(License.ISC, false))),
+            Or(Simple(Listed(License.MIT, false)), Simple(Listed(License.ISC, false))),
             ExpressionTools.parse("(mit) or (isc)")
         );
         Assert.same(
-            With(Defined(License.GPL_2_0_OR_LATER, false), Defined(Exception.AUTOCONF_2_0)),
+            With(Listed(License.GPL_2_0_OR_LATER, false), Listed(Exception.AUTOCONF_2_0)),
             ExpressionTools.parse("GPL-2.0-or-later WITH Autoconf-exception-2.0")
         );
         Assert.same(
-            With(Defined(License.GPL_2_0_OR_LATER, false), Ref(null, "custom")),
+            With(Listed(License.GPL_2_0_OR_LATER, false), Custom(null, "custom")),
             ExpressionTools.parse("GPL-2.0-or-later WITH AdditionRef-custom")
         );
     }

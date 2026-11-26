@@ -15,12 +15,12 @@ using spdx.ExpressionTools;
 class ExpressionStringifyTest extends Test {
 
     public function test__Simple_expressions_are_correctly_stringified() {
-        Assert.same("MIT", Simple(Defined(License.MIT, false)).stringify());
-        Assert.same("CDDL-1.0+", Simple(Defined(License.CDDL_1_0, true)).stringify());
-        Assert.same("LicenseRef-23", Simple(Ref(null, "23")).stringify());
+        Assert.same("MIT", Simple(Listed(License.MIT, false)).stringify());
+        Assert.same("CDDL-1.0+", Simple(Listed(License.CDDL_1_0, true)).stringify());
+        Assert.same("LicenseRef-23", Simple(Custom(null, "23")).stringify());
         Assert.same(
             "DocumentRef-spdx-tool-1.2:LicenseRef-MIT-Style-2",
-            Simple(Ref("spdx-tool-1.2", "MIT-Style-2")).stringify()
+            Simple(Custom("spdx-tool-1.2", "MIT-Style-2")).stringify()
         );
     }
     
@@ -28,17 +28,17 @@ class ExpressionStringifyTest extends Test {
         Assert.same(
             "MIT OR LGPL-2.1-only",
             Or(
-                Simple(Defined(License.MIT, false)),
-                Simple(Defined(License.LGPL_2_1_ONLY, false))
+                Simple(Listed(License.MIT, false)),
+                Simple(Listed(License.LGPL_2_1_ONLY, false))
             ).stringify()
         );
         Assert.same(
             "MIT OR LGPL-2.1-only OR BSD-3-Clause",
             Or(
-                Simple(Defined(License.MIT, false)),
+                Simple(Listed(License.MIT, false)),
                 Or(
-                    Simple(Defined(License.LGPL_2_1_ONLY, false)),
-                    Simple(Defined(License.BSD_3_CLAUSE, false))
+                    Simple(Listed(License.LGPL_2_1_ONLY, false)),
+                    Simple(Listed(License.BSD_3_CLAUSE, false))
                 )
             ).stringify()
         );
@@ -46,10 +46,10 @@ class ExpressionStringifyTest extends Test {
             "MIT OR LGPL-2.1-only OR BSD-3-Clause",
             Or(
                 Or(
-                    Simple(Defined(License.MIT, false)),
-                    Simple(Defined(License.LGPL_2_1_ONLY, false))
+                    Simple(Listed(License.MIT, false)),
+                    Simple(Listed(License.LGPL_2_1_ONLY, false))
                 ),
-                Simple(Defined(License.BSD_3_CLAUSE, false))
+                Simple(Listed(License.BSD_3_CLAUSE, false))
             ).stringify()
         );
     }
@@ -58,17 +58,17 @@ class ExpressionStringifyTest extends Test {
         Assert.same(
             "MIT AND LGPL-2.1-only",
             And(
-                Simple(Defined(License.MIT, false)),
-                Simple(Defined(License.LGPL_2_1_ONLY, false))
+                Simple(Listed(License.MIT, false)),
+                Simple(Listed(License.LGPL_2_1_ONLY, false))
             ).stringify()
         );
         Assert.same(
             "MIT AND LGPL-2.1-only AND BSD-3-Clause",
             And(
-                Simple(Defined(License.MIT, false)),
+                Simple(Listed(License.MIT, false)),
                 And(
-                    Simple(Defined(License.LGPL_2_1_ONLY, false)),
-                    Simple(Defined(License.BSD_3_CLAUSE, false))
+                    Simple(Listed(License.LGPL_2_1_ONLY, false)),
+                    Simple(Listed(License.BSD_3_CLAUSE, false))
                 )
             ).stringify()
         );
@@ -76,10 +76,10 @@ class ExpressionStringifyTest extends Test {
             "MIT AND LGPL-2.1-only AND BSD-3-Clause",
             And(
                 And(
-                    Simple(Defined(License.MIT, false)),
-                    Simple(Defined(License.LGPL_2_1_ONLY, false))
+                    Simple(Listed(License.MIT, false)),
+                    Simple(Listed(License.LGPL_2_1_ONLY, false))
                 ),
-                Simple(Defined(License.BSD_3_CLAUSE, false))
+                Simple(Listed(License.BSD_3_CLAUSE, false))
             ).stringify()
         );
     }
@@ -87,15 +87,15 @@ class ExpressionStringifyTest extends Test {
     public function test__With_expressions_are_correctly_stringified() {
         Assert.same(
             "GPL-2.0-or-later WITH Bison-exception-2.2",
-            With(Defined(License.GPL_2_0_OR_LATER, false), Defined(Exception.BISON_2_2)).stringify()
+            With(Listed(License.GPL_2_0_OR_LATER, false), Listed(Exception.BISON_2_2)).stringify()
         );
         Assert.same(
             "GPL-2.0-or-later WITH AdditionRef-custom",
-            With(Defined(License.GPL_2_0_OR_LATER, false), Ref(null, "custom")).stringify()
+            With(Listed(License.GPL_2_0_OR_LATER, false), Custom(null, "custom")).stringify()
         );
         Assert.same(
             "GPL-2.0-or-later WITH DocumentRef-foo:AdditionRef-bar",
-            With(Defined(License.GPL_2_0_OR_LATER, false), Ref("foo", "bar")).stringify()
+            With(Listed(License.GPL_2_0_OR_LATER, false), Custom("foo", "bar")).stringify()
         );
     }
     
@@ -103,20 +103,17 @@ class ExpressionStringifyTest extends Test {
         Assert.same(
             "LGPL-2.1-only OR BSD-3-Clause AND MIT",
             Or(
-                Simple(Defined(License.LGPL_2_1_ONLY, false)),
-                And(
-                    Simple(Defined(License.BSD_3_CLAUSE, false)),
-                    Simple(Defined(License.MIT, false))
-                )
+                Simple(Listed(License.LGPL_2_1_ONLY, false)),
+                And(Simple(Listed(License.BSD_3_CLAUSE, false)), Simple(Listed(License.MIT, false)))
             ).stringify()
         );
         Assert.same(
             "MIT AND (LGPL-2.1-or-later OR BSD-3-Clause)",
             And(
-                Simple(Defined(License.MIT, false)),
+                Simple(Listed(License.MIT, false)),
                 Or(
-                    Simple(Defined(License.LGPL_2_1_OR_LATER, false)),
-                    Simple(Defined(License.BSD_3_CLAUSE, false))
+                    Simple(Listed(License.LGPL_2_1_OR_LATER, false)),
+                    Simple(Listed(License.BSD_3_CLAUSE, false))
                 )
             ).stringify()
         );

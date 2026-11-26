@@ -34,15 +34,14 @@ function matches(expr: Null<Expression>): Bool {
         case null: false;
         case Simple(licenseExpr):
             switch (licenseExpr) {
-                // Known, precise license in a curated set.
-                case Defined(license, orAnyLater): license.isFsfLibre;
-                // Custom license with a user-defined identifier.
-                case Ref(documentName, licenseName): false;
+                case Listed(license, orAnyLater): license.isFsfLibre;
+                case Custom(documentRef, licenseRef): false;
             };
-        case Or(left, right): matches(left) || matches(right);
-        case And(left, right): matches(left) && matches(right);
+        case Or(left, right):
+            matches(left) || matches(right);
+        case And(left, right):
+            matches(left) && matches(right);
         case With(licenseExpr, exceptionExpr):
-            // The licensee may optionally apply the exception.
             matches(Expression.Simple(licenseExpr));
     };
 }
