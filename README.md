@@ -27,7 +27,28 @@ import spdx.Expression;
 import spdx.ExpressionTools;
 
 var expr1: Null<Expression> = ExpressionTools.parse("MIT OR Apache-2.0");
-var expr2: Null<Expression> = ExpressionTools.parse("GPL-2.0+ WITH Bootloader-exception")
+var expr2: Null<Expression> = ExpressionTools.parse("Beerware WITH Bootloader-exception");
+
+function matches(expr: Null<Expression>): Bool {
+    return switch expr {
+        case null: false;
+        case Simple(licenseExpr):
+            switch (licenseExpr) {
+                // Known, precise license in a curated set.
+                case Defined(license, orAnyLater): license.isFsfLibre;
+                // Custom license with a user-defined identifier.
+                case Ref(documentName, licenseName): false;
+            };
+        case Or(left, right): matches(left) || matches(right);
+        case And(left, right): matches(left) && matches(right);
+        case With(licenseExpr, exceptionExpr):
+            // The licensee may optionally apply the exception.
+            matches(Expression.Simple(licenseExpr));
+    };
+}
+
+trace(matches(expr1)); // true
+trace(matches(expr2)); // false
 ```
 
 ## Notices
