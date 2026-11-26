@@ -13,9 +13,17 @@ final class ExpressionTools {
     private static function stringifyLicenseExpr(expr: LicenseExpr): String {
         return switch expr {
             case Defined(license, orAnyLater):
-                '${license.id}${orAnyLater ? "+" : ""}';
+                if (orAnyLater) {
+                    '${license.id}+';
+                } else {
+                    license.id;
+                };
             case Ref(document, license):
-                '${document != null ? 'DocumentRef-$document:' : ""}LicenseRef-$license';
+                if (document != null) {
+                    'DocumentRef-$document:LicenseRef-$license';
+                } else {
+                    'LicenseRef-$license';
+                };
         };
     }
     
@@ -24,7 +32,11 @@ final class ExpressionTools {
             case Defined(exception):
                 exception.id;
             case Ref(document, addition):
-                '${document != null ? 'DocumentRef-$document:' : ""}AdditionRef-$addition';
+                if (document != null) {
+                    'DocumentRef-$document:AdditionRef-$addition';
+                } else {
+                    'AdditionRef-$addition';
+                };
         };
     }
     
@@ -45,19 +57,6 @@ final class ExpressionTools {
                 final a = if (left.match(Or(_, _))) '(${stringify(left)})' else stringify(left);
                 final b = if (right.match(Or(_, _))) '(${stringify(right)})' else stringify(right);
                 '$a AND $b';
-        }
-    }
-    
-    private static function toToken(name: String): Token {
-        return switch name.toLowerCase() {
-            case "and":
-                Token.OpAnd;
-            case "or":
-                Token.OpOr;
-            case "with":
-                Token.OpWith;
-            case _:
-                Token.Identifier(name);
         }
     }
     
@@ -90,14 +89,25 @@ final class ExpressionTools {
             } else {
                 if (char == " ".code) {
                     final name = source.substring(identStart, index);
-                    tokens.push(toToken(name));
+                    tokens.push(switch name.toLowerCase() {
+                        case "and":
+                            Token.OpAnd;
+                        case "or":
+                            Token.OpOr;
+                        case "with":
+                            Token.OpWith;
+                        case _:
+                            Token.Identifier(name);
+                    });
                     identStart = null;
                 } else if (char == "+".code) {
-                    tokens.push(Token.Identifier(source.substring(identStart, index)));
+                    final name = source.substring(identStart, index);
+                    tokens.push(Token.Identifier(name));
                     tokens.push(Token.OpPlus);
                     identStart = null;
                 } else if (char == ")".code) {
-                    tokens.push(Token.Identifier(source.substring(identStart, index)));
+                    final name = source.substring(identStart, index);
+                    tokens.push(Token.Identifier(name));
                     tokens.push(Token.CloseParen);
                     identStart = null;
                 }
@@ -187,9 +197,8 @@ final class ExpressionTools {
             final license = License.getById(name);
             if (license == null) {
                 return null;
-            } else {
-                return Defined(license, plus);
             }
+            return Defined(license, plus);
         }
     }
     
@@ -237,9 +246,9 @@ final class ExpressionTools {
             final exception = Exception.getById(name);
             if (exception == null) {
                 return null;
-            } else {
-                return Defined(exception);
             }
+            
+            return Defined(exception);
         }
     }
     
@@ -361,15 +370,13 @@ final class ExpressionTools {
             }
         }
         
-        return if (stack.length == 1) {
-            stack[0];
+        if (stack.length == 1) {
+            return stack[0];
+        } else if (stack.length == 0) {
+            throw "empty expression";
         } else {
-            if (stack.length == 0) {
-                throw "empty expression";
-            } else {
-                throw 'unexpected end of expression. stack (length ${stack.length}): ${stack.map(e -> Std.string(e)).join(", ")}';
-            }
-        };
+            throw 'unexpected end of expression. stack (length ${stack.length}): ${stack.map(e -> Std.string(e)).join(", ")}';
+        }
     }
 }
 
