@@ -34,7 +34,9 @@ function saveJsonToDataFile(url: String, fileName: String): Void {
 function main(): Void {
 
     final repo = "https://raw.githubusercontent.com/spdx/license-list-data";
-    final ref = "refs/heads/main";
+    final ref = "refs/tags/v3.29.0";
+    
+    Sys.println('=== FETCHING LICENSE DATA, VERSION $ref ===');
     saveJsonToDataFile('$repo/$ref/json/licenses.json', "licenses.json");
     saveJsonToDataFile('$repo/$ref/json/exceptions.json', "exceptions.json");
 }
