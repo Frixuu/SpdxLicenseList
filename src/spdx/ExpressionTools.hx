@@ -66,15 +66,8 @@ final class ExpressionTools {
         var identStart: Null<Int> = null;
         var index = 0;
         
-        while (true) {
+        while (index < source.length) {
         
-            if (index >= source.length) {
-                if (identStart != null) {
-                    tokens.push(Token.Identifier(source.substring(identStart)));
-                }
-                break;
-            }
-            
             final char = source.charCodeAt(index);
             if (identStart == null) {
                 if (char == " ".code) {
@@ -114,6 +107,10 @@ final class ExpressionTools {
             }
             
             index += 1;
+        }
+        
+        if (identStart != null) {
+            tokens.push(Token.Identifier(source.substring(identStart)));
         }
         
         return tokens;

@@ -15,6 +15,7 @@ using spdx.ExpressionTools;
 class ExpressionParseTest extends Test {
 
     public function test__Simple_expressions_are_correctly_parsed() {
+        Assert.same(Simple(Listed(License.MIT, false)), ExpressionTools.mustParse("MIT"));
         Assert.same(Simple(Listed(License.MIT, false)), ExpressionTools.parse("MIT"));
         Assert.same(Simple(Listed(License.CDDL_1_0, true)), ExpressionTools.parse("CDDL-1.0+"));
         Assert.same(Simple(Custom(null, "23")), ExpressionTools.parse("LicenseRef-23"));
@@ -22,6 +23,19 @@ class ExpressionParseTest extends Test {
             Simple(Custom("spdx-tool-1.2", "MIT-Style-2")),
             ExpressionTools.parse("DocumentRef-spdx-tool-1.2:LicenseRef-MIT-Style-2")
         );
+    }
+    
+    public function test__Invalid_simple_expressions_are_rejected() {
+        Assert.isNull(ExpressionTools.parse(""));
+        Assert.isNull(ExpressionTools.parse("67676767"));
+        Assert.isNull(ExpressionTools.parse("Foobarbaz"));
+        Assert.isNull(ExpressionTools.parse("LicenseRef-"));
+        Assert.isNull(ExpressionTools.parse("LicenseRef-67+"));
+        Assert.isNull(ExpressionTools.parse("cool-LicenseRef-foo"));
+        Assert.isNull(ExpressionTools.parse("LicenseRef-foo:DocumentRef-bar"));
+        Assert.isNull(ExpressionTools.parse("DocumentRef-ąęóść:LicenseRef-foo"));
+        Assert.isNull(ExpressionTools.parse("DocumentRef-foo:LicenseRef-bar:MyRef-baz"));
+        Assert.isNull(ExpressionTools.parse("LicenseRef-😎"));
     }
     
     public function test__Compound_expressions_are_correctly_parsed() {
@@ -56,19 +70,25 @@ class ExpressionParseTest extends Test {
         );
     }
     
-    public function test__Invalid_expressions_are_rejected() {
-        Assert.isNull(ExpressionTools.parse("LicenseRef-"));
-        Assert.isNull(ExpressionTools.parse("LicenseRef-67+"));
-        Assert.isNull(ExpressionTools.parse("cool-LicenseRef-foo"));
-        Assert.isNull(ExpressionTools.parse("67676767"));
-        Assert.isNull(ExpressionTools.parse("DocumentRef-ąęóść:LicenseRef-foo"));
-        Assert.isNull(ExpressionTools.parse("LicenseRef-😎"));
+    public function test__Invalid_compound_expressions_are_rejected() {
         Assert.isNull(ExpressionTools.parse("(("));
         Assert.isNull(ExpressionTools.parse(")"));
         Assert.isNull(ExpressionTools.parse("()"));
+        Assert.isNull(ExpressionTools.parse("+ + + +"));
+        Assert.isNull(ExpressionTools.parse("AND"));
+        Assert.isNull(ExpressionTools.parse("OR"));
+        Assert.isNull(ExpressionTools.parse("WITH"));
+        Assert.isNull(ExpressionTools.parse(" AND "));
+        Assert.isNull(ExpressionTools.parse(" OR "));
+        Assert.isNull(ExpressionTools.parse(" WITH "));
+        Assert.isNull(ExpressionTools.parse("(MIT)(MIT)"));
         Assert.isNull(ExpressionTools.parse("MIT AND+"));
+        Assert.isNull(ExpressionTools.parse("MIT AND BAR"));
+        Assert.isNull(ExpressionTools.parse("MIT OR BAR"));
+        Assert.isNull(ExpressionTools.parse("MIT WITH BAR"));
         Assert.isNull(ExpressionTools.parse("MIT WITH DocumentRef-👻:AdditionRef-yo"));
         Assert.isNull(ExpressionTools.parse("MIT WITH AdditionRef-привет"));
+        Assert.isNull(ExpressionTools.parse("MIT WITH WITH "));
         Assert.isNull(ExpressionTools.parse("GPL-2.0-or-later WITH DocumentRef-custom"));
     }
 }
