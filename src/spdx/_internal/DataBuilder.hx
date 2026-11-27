@@ -45,7 +45,7 @@ final class DataBuilder {
         final data: Schema.LicenseData = Json.parse(json);
         final licensesByName: StringMap<LicenseInfo> = new StringMap();
         final licensesByIdentifier: StringMap<LicenseInfo> = new StringMap();
-        final licenseInfos: Array<LicenseInfo> = data.licenses.map((def) -> {
+        final licenseInfos: Array<LicenseInfo> = data.licenses.map(def -> {
         
             final license = new License(
                 def.name,
@@ -233,7 +233,7 @@ final class DataBuilder {
         final json = File.getContent(Path.join([dir, "exceptions.json"]));
         final data: Schema.ExceptionData = Json.parse(json);
         final exceptionsByName: StringMap<ExceptionInfo> = new StringMap();
-        final exceptionInfos: Array<ExceptionInfo> = data.exceptions.map((def) -> {
+        final exceptionInfos: Array<ExceptionInfo> = data.exceptions.map(def -> {
         
             final exception = new Exception(
                 def.name,

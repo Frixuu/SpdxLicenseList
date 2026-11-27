@@ -8,6 +8,9 @@ import spdx.Expression.LicenseExpr;
 
 using StringTools;
 
+/**
+    Utilities for dealing with `spdx.Expression`s.
+**/
 final class ExpressionTools {
 
     private static function stringifyLicenseExpr(expr: LicenseExpr): String {
@@ -133,7 +136,8 @@ final class ExpressionTools {
     /**
         Parses an expression from a string.
         @param source The source string.
-        @return The parsed expression. Throws a `haxe.ValueException` if the string is not a valid expression.
+        @return The parsed expression.
+        Throws a `haxe.ValueException` if the string is not a valid expression.
     **/
     public static function mustParse(source: String): Expression {
         final tokens = tokenize(source);
@@ -289,7 +293,9 @@ final class ExpressionTools {
                             final last = stack.pop();
                             switch last {
                                 case Simple(license):
-                                    throw 'unexpected parenthesis: first ${stringifyLicenseExpr(license)}, then (${stringify(expr)})';
+                                    final prev = stringifyLicenseExpr(license);
+                                    final now = stringify(expr);
+                                    throw 'unexpected parenthesis: first $prev, then ($now)';
                                 case And(left, null):
                                     stack.push(And(left, expr));
                                 case Or(left, null):
@@ -340,7 +346,8 @@ final class ExpressionTools {
                         final last = stack.pop();
                         switch last {
                             case Simple(license):
-                                throw 'two identifiers in a row: first ${stringifyLicenseExpr(license)}, then "$name"';
+                                final prev = stringifyLicenseExpr(license);
+                                throw 'two identifiers in a row: first $prev, then "$name"';
                             case And(left, null):
                                 final expr = parseLicenseExpr(name, orLater);
                                 if (expr == null) throw '"$name" is not a valid license';
@@ -372,11 +379,15 @@ final class ExpressionTools {
         } else if (stack.length == 0) {
             throw "empty expression";
         } else {
-            throw 'unexpected end of expression. stack (length ${stack.length}): ${stack.map(e -> Std.string(e)).join(", ")}';
+            final repr = stack.map(e -> Std.string(e)).join(", ");
+            throw 'unexpected end of expression. stack (length ${stack.length}): $repr';
         }
     }
 }
 
+/**
+    Basic grammatical unit of an SPDX expression.
+**/
 private enum Token {
     Identifier(name: String);
     OpPlus;

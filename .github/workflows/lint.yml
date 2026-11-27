@@ -33,4 +33,4 @@ jobs:
       - name: Install tools
         run: haxelib install checkstyle 2.9.0 --quiet
       - name: Run Checkstyle
-        run: haxelib run checkstyle --exitcode --source src
+        run: haxelib run checkstyle --exitcode --source src --source tests
